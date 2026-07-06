@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurador de PC a Medida</title>
+    
+    <!-- PWA & Mobile Experience Meta Tags -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#111827">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- SEO & Open Graph (WhatsApp, Facebook, etc.) -->
+    <meta name="description" content="Diseña, cotiza y arma la PC de tus sueños a tu medida. Explora nuestro configurador interactivo, elige los mejores componentes y obtén el rendimiento que necesitas para gaming o trabajo.">
+    <meta property="og:title" content="Configurador de PC a Medida - Arma tu Setup">
+    <meta property="og:description" content="Diseña, cotiza y arma la PC de tus sueños a tu medida. Explora nuestro configurador interactivo, elige los mejores componentes y obtén el rendimiento que necesitas para gaming o trabajo.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/juanmartinbarrientos/Mis-Redes/main/LandingPage/pc_a_medida.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://juanmartinbarrientos.github.io/LandingPage/"> <!-- Ajustar URL final si es distinta -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Phosphor Icons for modern iconography -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Structured Data / JSON-LD Schema.org for SEO & AI Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ComputerStore",
+      "name": "decsatech",
+      "image": "https://raw.githubusercontent.com/juanmartinbarrientos/Mis-Redes/main/LandingPage/pc_a_medida.jpg",
+      "@id": "https://juanmartinbarrientos.github.io/LandingPage/#store",
+      "url": "https://juanmartinbarrientos.github.io/LandingPage/",
+      "telephone": "+5491123456789",
+      "priceRange": "$$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Buenos Aires, Argentina",
+        "addressLocality": "Buenos Aires",
+        "addressCountry": "AR"
+      },
+      "description": "Empresa de informática y tecnología creada por entusiastas del hardware orientada a brindar soluciones de venta corporativa a empresas. Ofrecemos armado de PC a medida, PCs corporativas prearmadas, soporte de calidad con garantía escrita oficial en todos los componentes y facturación legal (Factura A y B).",
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "ARS",
+        "lowPrice": "370000",
+        "offerCount": "10",
+        "category": "Computers & Electronics"
+      },
+      "additionalType": "https://schema.org/LocalBusiness",
+      "knowsAbout": ["Hardware de Computadoras", "Armado de PC", "Servicios Informáticos para Empresas", "Garantía Escrita", "Factura A y B"],
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "PC Armada Oficina & Corporativa AM4",
+            "description": "PC equipada con socket AM4, SSD de 240GB, placa madre ASUS, gabinete kit completo con teclado y mouse. Ideal para empresas. Cuenta con garantía escrita de 12 meses y emisión de factura.",
+            "offers": {
+              "@type": "Offer",
+              "price": "370000",
+              "priceCurrency": "ARS",
+              "availability": "https://schema.org/InStock",
+              "warranty": {
+                "@type": "WarrantyPromise",
+                "durationOfWarranty": {
+                  "@type": "QuantitativeValue",
+                  "value": 12,
+                  "unitCode": "MON"
+                },
+                "description": "Garantía oficial directa por escrito."
+              }
+            }
+          }
+        }
+      ],
+      "paymentAccepted": ["Cash", "Credit Card", "Bank Transfer"],
+      "currenciesAccepted": "ARS, USD"
+    }
+    </script>
+</head>
+<body>
+    <div class="main-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar card">
+            <div class="sidebar-logo">
+                <img src="LOGO_2.png" alt="decsatech" class="sidebar-logo-img">
+                <span>decsatech</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="pcs-amd.html" class="nav-item"><i class="ph-bold ph-cpu"></i> PCS AMD</a>
+                <a href="pcs-intel.html" class="nav-item"><i class="ph-bold ph-cpu"></i> PCS INTEL</a>
+                <a href="index.html" class="nav-item active"><i class="ph-bold ph-gear-six"></i> ARMA TU PC</a>
+            </nav>
+        </aside>
+
+        <!-- APP CONTAINER -->
+        <div class="app-container">
+        <!-- HEADER -->
+        <header class="header card">
+            <div class="logo">
+                <img src="LOGO_2.png" alt="Logo" class="logo-img">
+                <h1>Configurador de PC</h1>
+            </div>
+            <div class="header-actions" style="display: flex; gap: 12px; align-items: center;">
+                <button id="share-btn" class="icon-btn" title="Compartir">
+                    <i class="ph-bold ph-share-network"></i>
+                </button>
+                <div class="theme-toggle">
+                    <span>Elegir motivo</span>
+                    <button id="btn-light-theme" class="theme-btn" title="Modo Claro">
+                        <i class="ph-fill ph-sun"></i>
+                    </button>
+                    <button id="btn-dark-theme" class="theme-btn active" title="Modo Oscuro">
+                        <i class="ph-fill ph-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="configurator-main">
+            <!-- SECCIÓN 1: PRESENTACIÓN DE LA EMPRESA -->
+            <section class="card company-presentation-section">
+                <div class="presentation-header">
+                    <span class="badge promo-badge">Quiénes Somos</span>
+                    <h2>Tecnología de Entusiastas para tu Empresa</h2>
+                </div>
+                <div class="presentation-body">
+                    <p class="lead-text">
+                        Nacimos de la pasión absoluta por la informática. Somos un equipo de profesionales y entusiastas del hardware que decidimos dar un paso adelante: abrir un **canal de venta especializado para empresas**.
+                    </p>
+                    <p>
+                        Entendemos que las empresas no solo necesitan computadoras; necesitan estabilidad, rendimiento optimizado y asesoramiento técnico honesto. No vendemos solo cajas cerradas, diseñamos soluciones de hardware eficientes para optimizar la productividad de tu negocio.
+                    </p>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <i class="ph-bold ph-shield-check"></i>
+                            <div>
+                                <h3>Soporte Corporativo</h3>
+                                <p>Atención directa y soluciones inmediatas para tu empresa.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="ph-bold ph-wrench"></i>
+                            <div>
+                                <h3>ADN 100% Técnico</h3>
+                                <p>Armado profesional por técnicos apasionados por el hardware.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Countdown timer above the card, aligned to the left -->
+            <div class="countdown-above-container">
+                <div class="offer-countdown-box">
+                    <div class="countdown-header">
+                        <i class="ph-bold ph-clock"></i>
+                        <span>OFERTA LIMITADA</span>
+                    </div>
+                    <div class="countdown-timer">
+                        <div class="countdown-segment">
+                            <span class="countdown-num" id="cd-days">03</span>
+                            <span class="countdown-lbl">días</span>
+                        </div>
+                        <div class="countdown-dots">:</div>
+                        <div class="countdown-segment">
+                            <span class="countdown-num" id="cd-hours">00</span>
+                            <span class="countdown-lbl">horas</span>
+                        </div>
+                        <div class="countdown-dots">:</div>
+                        <div class="countdown-segment">
+                            <span class="countdown-num" id="cd-minutes">00</span>
+                            <span class="countdown-lbl">min</span>
+                        </div>
+                        <div class="countdown-dots">:</div>
+                        <div class="countdown-segment">
+                            <span class="countdown-num" id="cd-seconds">00</span>
+                            <span class="countdown-lbl">seg</span>
+                        </div>
+                    </div>
+                    <div class="countdown-footer" id="cd-footer">Quedan 3 días</div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: OFERTA DESTACADA PC AM4 -->
+            <section class="card special-offer-section">
+                <div class="offer-badge-wrapper">
+                    <span class="badge required highlight-badge">¡Oferta Exclusiva Empresas!</span>
+                </div>
+                <div class="offer-container">
+                    
+                    <div class="offer-details">
+                        <h2>PC Armada Oficina & Corporativa AM4</h2>
+                        <p class="offer-subtitle">Rendimiento garantizado para la productividad diaria de tu negocio.</p>
+                        
+                        <ul class="offer-specs">
+                            <li><i class="ph-bold ph-cpu"></i> <span><strong>Plataforma:</strong> AMD Socket AM4</span></li>
+                            <li><i class="ph-bold ph-hard-drive"></i> <span><strong>Almacenamiento:</strong> SSD 240GB alta velocidad</span></li>
+                            <li><i class="ph-bold ph-cpu"></i> <span><strong>Memoria RAM:</strong> DDR4 8GB</span></li>
+                            <li><i class="ph-bold ph-motherboard"></i> <span><strong>Motherboard:</strong> ASUS de alta durabilidad</span></li>
+                            <li><i class="ph-bold ph-desktop"></i> <span><strong>Gabinete:</strong> Gabinete Kit (incluye teclado, mouse y parlantes)</span></li>
+                        </ul>
+                        
+                        <div class="offer-price-section">
+                            <div class="price-info">
+                                <span class="price-label">PRECIO ESPECIAL</span>
+                                <span class="price-amount">$370.000 <span class="currency">ARS</span></span>
+                            </div>
+                            <a href="https://wa.me/5491123456789?text=Hola!%20Me%20interesa%20la%20oferta%20de%20la%20PC%20Armada%20AM4%20por%20$370.000%20para%20mi%20empresa." target="_blank" class="btn-whatsapp offer-btn">
+                                <i class="ph-bold ph-whatsapp-logo"></i> Consultar por esta Oferta
+                            </a>
+                        </div>
+                    </div>
+                    <div class="offer-icon-visual">
+                        <i class="ph-fill ph-monitor-play"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: COTIZADOR A MEDIDA -->
+            <section class="config-section card">
+                <div class="section-header">
+                    <h2>3. ARMA TU PC A MEDIDA (COTIZADOR)</h2>
+                    <span class="badge primary-badge">Configurador</span>
+                </div>
+                <p class="section-intro-text">Si necesitás una configuración personalizada para puestos específicos, seleccioná la plataforma a continuación para comenzar:</p>
+                <div class="section-header" style="margin-top: 15px; margin-bottom: 8px;">
+                    <h2>1. SELECCIONAR PLATAFORMA / SOCKET</h2>
+                    <span class="badge required">Obligatorio</span>
+                </div>
+                <div class="platform-options" id="platform-container">
+                    <button class="platform-btn" data-socket="AM4">AM4</button>
+                    <button class="platform-btn" data-socket="AM5">AM5</button>
+                    <button class="platform-btn" data-socket="LGA1200">LGA1200</button>
+                    <button class="platform-btn" data-socket="LGA1700">LGA1700</button>
+                    <button class="platform-btn" data-socket="LGA1851">LGA1851</button>
+                </div>
+            </section>
+
+            <!-- CORE COMPONENTS CONTAINER -->
+            <div class="components-container card">
+                
+                <!-- 2. PROCESADOR -->
+                <div class="form-group">
+                    <label for="cpu">2. PROCESADOR</label>
+                    <div class="select-wrapper">
+                        <select id="cpu" class="custom-select" disabled>
+                            <option value="">-- Seleccione plataforma primero --</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down select-icon"></i>
+                    </div>
+                </div>
+
+                <!-- 3. MOTHERBOARD -->
+                <div class="form-group">
+                    <label for="motherboard">3. MOTHERBOARD</label>
+                    <div class="select-wrapper">
+                        <select id="motherboard" class="custom-select" disabled>
+                            <option value="">-- Seleccione plataforma primero --</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down select-icon"></i>
+                    </div>
+                </div>
+
+                <!-- 4. MEMORIA RAM -->
+                <div class="form-group row-group">
+                    <div class="flex-grow">
+                        <label for="ram">4. MEMORIA RAM</label>
+                        <div class="select-wrapper">
+                            <select id="ram" class="custom-select" disabled>
+                                <option value="">-- Seleccione Mother primero --</option>
+                            </select>
+                            <i class="ph-bold ph-caret-down select-icon"></i>
+                        </div>
+                    </div>
+                    <div class="qty-group">
+                        <label for="ram-qty">CANTIDAD</label>
+                        <div class="select-wrapper">
+                            <select id="ram-qty" class="custom-select" disabled>
+                                <option value="1">x1</option>
+                                <option value="2">x2</option>
+                                <option value="4">x4</option>
+                            </select>
+                            <i class="ph-bold ph-caret-down select-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OTHER COMPONENTS CONTAINER -->
+            <div class="components-container card">
+                
+                <!-- 5. ALMACENAMIENTO (Dynamic List) -->
+                <div class="form-group">
+                    <label>5. ALMACENAMIENTO</label>
+                    <div id="storage-list">
+                        <!-- Dynamic storage rows will be appended here -->
+                    </div>
+                    <button id="add-storage-btn" class="btn-dashed">
+                        <i class="ph-bold ph-plus"></i> Agregar disco
+                    </button>
+                </div>
+
+                <!-- 6. GABINETE -->
+                <div class="form-group">
+                    <label for="case">6. GABINETE</label>
+                    <div class="select-wrapper">
+                        <select id="case" class="custom-select">
+                            <option value="">-- Seleccione --</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down select-icon"></i>
+                    </div>
+                </div>
+
+                <!-- 7. FUENTE -->
+                <div class="form-group">
+                    <label for="psu">7. FUENTE</label>
+                    <div class="select-wrapper">
+                        <select id="psu" class="custom-select">
+                            <option value="">-- Seleccione --</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down select-icon"></i>
+                    </div>
+                </div>
+
+                <!-- 8. PLACA DE VIDEO -->
+                <div class="form-group">
+                    <label for="gpu">8. PLACA DE VIDEO</label>
+                    <div class="select-wrapper">
+                        <select id="gpu" class="custom-select">
+                            <option value="">-- Seleccione --</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down select-icon"></i>
+                    </div>
+                </div>
+
+                <!-- 9. REFRIGERACIÓN -->
+                <div class="form-group">
+                    <label for="cooling">9. REFRIGERACIÓN</label>
+                    <div class="select-wrapper">
+                        <select id="cooling" class="custom-select">
+                            <option value="">-- Seleccione --</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down select-icon"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SUMMARY / VISUALIZER -->
+            <section class="config-section card summary-card">
+                <div class="section-header">
+                    <h2><i class="ph-bold ph-receipt"></i> RESUMEN DE COMPRA</h2>
+                </div>
+                
+                <div class="bulk-discount-wrapper">
+                    <label for="buy-multiple" class="bulk-discount-label">
+                        <input type="checkbox" id="buy-multiple" class="bulk-checkbox">
+                        <span>Comprar 3 unidades y obtener descuento</span>
+                    </label>
+                    <div id="whatsapp-info" class="whatsapp-info">
+                        <p style="margin-bottom: 12px;">Desbloqueá un descuento especial llevando 3 unidades.</p>
+                        <button id="whatsapp-btn" class="btn-whatsapp">
+                            <i class="ph-bold ph-whatsapp-logo"></i> Consultar por WhatsApp
+                        </button>
+                    </div>
+                </div>
+
+                <div class="summary-content" id="summary-content">
+                    <p class="empty-summary">Aún no has seleccionado componentes.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    </div>
+
+    <!-- STICKY FOOTER -->
+    <footer class="sticky-footer">
+        <div class="footer-content">
+            <div class="price-container">
+                <span class="price-label">TOTAL IVA INCLUÍDO</span>
+                <span class="price-value" id="total-price">$ 0,00</span>
+            </div>
+            <button id="copy-config-btn" class="btn-primary">
+                Copiar configuración
+            </button>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Configuración copiada al portapapeles</div>
+
+    <script src="xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

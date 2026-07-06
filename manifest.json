@@ -1,0 +1,16 @@
+{
+  "name": "PC a Medida - Landing Page",
+  "short_name": "Arma Tu PC",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "description": "Arma tu PC a medida con las mejores ofertas y cotización online.",
+  "icons": [
+    {
+      "src": "./LOGO_2.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}

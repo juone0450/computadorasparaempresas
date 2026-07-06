@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark" data-platform="amd">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presupuestos PCS AMD - Configurador de PC</title>
+    <meta name="description" content="Explora presupuestos y configuraciones prearmadas de PC con procesadores AMD Ryzen. Consigue el mejor rendimiento gaming o trabajo al mejor precio.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="main-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar card">
+            <div class="sidebar-logo">
+                <img src="LOGO_2.png" alt="decsatech" class="sidebar-logo-img">
+                <span>decsatech</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="pcs-amd.html" class="nav-item active"><i class="ph-bold ph-cpu"></i> PCS AMD</a>
+                <a href="pcs-intel.html" class="nav-item"><i class="ph-bold ph-cpu"></i> PCS INTEL</a>
+                <a href="index.html" class="nav-item"><i class="ph-bold ph-gear-six"></i> ARMA TU PC</a>
+            </nav>
+        </aside>
+
+        <!-- APP CONTAINER -->
+        <div class="app-container">
+            <!-- HEADER -->
+            <header class="header card">
+                <div class="logo">
+                    <img src="LOGO_2.png" alt="Logo" class="logo-img">
+                    <h1>Presupuestos AMD</h1>
+                </div>
+                <div class="theme-toggle">
+                    <span>Elegir motivo</span>
+                    <button id="btn-light-theme" class="theme-btn" title="Modo Claro">
+                        <i class="ph-fill ph-sun"></i>
+                    </button>
+                    <button id="btn-dark-theme" class="theme-btn active" title="Modo Oscuro">
+                        <i class="ph-fill ph-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main class="configurator-main">
+                <section class="pc-grid" id="pc-list-container">
+                    <p style="color: var(--text-secondary); text-align: center; grid-column: 1/-1; padding: 40px 0;">
+                        Cargando presupuestos de AMD...
+                    </p>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="xlsx.full.min.js"></script>
+    <script src="presupuestos.js"></script>
+</body>
+</html>
