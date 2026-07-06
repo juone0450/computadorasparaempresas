@@ -579,10 +579,10 @@ function updatePrice() {
     
     if (isBulk) {
         priceLabel.innerHTML = 'TOTAL APROX (SIN DESC.) <i class="ph-bold ph-whatsapp" style="color: #25D366; font-size: 16px; vertical-align: middle;"></i>';
-        totalPriceEl.textContent = `$ ${finalTotal.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} (x3)`;
+        totalPriceEl.textContent = `$ ${finalTotal.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0})} (x3)`;
     } else {
         priceLabel.textContent = 'TOTAL IVA INCLUÍDO';
-        totalPriceEl.textContent = `$ ${finalTotal.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        totalPriceEl.textContent = `$ ${finalTotal.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
     }
     
     saveConfiguratorState();

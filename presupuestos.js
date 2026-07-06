@@ -32,7 +32,8 @@ const predefinedPcs = {
                 storage: "SSD 240GB",
                 storageType: "sata",
                 case: "Magnum",
-                cooling: "Stock",
+                cooling: "COOLER CPU KELYX P95W AMD/INTEL",
+                fixedPrice: 385000,
                 gpu: "Integrados",
                 psu: "Fuente"
             }
@@ -258,11 +259,15 @@ function renderPreconfiguredPcs(platform) {
         
         // Calculate Total
         let total = 0;
-        if (matchedCpu) total += matchedCpu.price;
-        if (matchedMb) total += matchedMb.price;
-        if (matchedRam) total += matchedRam.price * pc.specs.ramQty;
-        if (matchedStorage) total += matchedStorage.price;
-        if (matchedCase) total += matchedCase.price;
+        if (pc.specs.fixedPrice) {
+            total = pc.specs.fixedPrice;
+        } else {
+            if (matchedCpu) total += matchedCpu.price;
+            if (matchedMb) total += matchedMb.price;
+            if (matchedRam) total += matchedRam.price * pc.specs.ramQty;
+            if (matchedStorage) total += matchedStorage.price;
+            if (matchedCase) total += matchedCase.price;
+        }
         
         const card = document.createElement('div');
         card.className = 'card pc-card';
@@ -308,12 +313,20 @@ function renderPreconfiguredPcs(platform) {
                             <span class="pc-spec-val">${matchedCase ? matchedCase.name : 'No disponible'}</span>
                         </div>
                     </li>
+                    ${pc.specs.cooling && pc.specs.cooling !== 'Stock' ? `
+                    <li class="pc-spec-item">
+                        <i class="ph-bold ph-fan"></i>
+                        <div>
+                            <span class="pc-spec-label">Cooler:</span>
+                            <span class="pc-spec-val">${pc.specs.cooling}</span>
+                        </div>
+                    </li>` : ''}
                 </ul>
             </div>
             <div>
                 <div class="pc-price-box">
                     <span class="pc-price-label">Precio Estimado</span>
-                    <span class="pc-price-val">$ ${total.toLocaleString('es-AR', {minimumFractionDigits: 2})}</span>
+                    <span class="pc-price-val">$ ${total.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0})}</span>
                 </div>
                 <button class="btn-primary" style="width:100%; text-align:center; justify-content:center;" onclick="customizePc(${idx}, '${platform}')">
                     <i class="ph-bold ph-gear-six"></i> Personalizar en Armador
