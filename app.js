@@ -749,26 +749,68 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Web Share API implementation
+    // Custom Share Modal Logic
+    const shareModal = document.getElementById('share-modal');
+    const shareModalClose = document.getElementById('share-modal-close');
     const shareBtn = document.getElementById('share-btn');
+    const shareWp = document.getElementById('share-whatsapp-btn');
+    const shareEmail = document.getElementById('share-email-btn');
+    const shareCopy = document.getElementById('share-copy-btn');
+    
+    let currentShareText = "";
+
+    function openShareModal(text) {
+        currentShareText = text;
+        if (shareModal) shareModal.classList.add('active');
+        triggerHaptic();
+    }
+
+    if (shareModalClose) {
+        shareModalClose.addEventListener('click', () => {
+            shareModal.classList.remove('active');
+        });
+    }
+
     if (shareBtn) {
-        if (navigator.share) {
-            shareBtn.addEventListener('click', async () => {
-                try {
-                    triggerHaptic();
-                    await navigator.share({
-                        title: 'Configurador de PC a Medida',
-                        text: '¡Mira la PC que armé o la oferta que encontré en decsatech!',
-                        url: window.location.href,
-                    });
-                } catch (err) {
-                    console.log('Error sharing:', err);
+        shareBtn.style.display = 'flex';
+        shareBtn.addEventListener('click', () => {
+            const isBulk = document.getElementById('buy-multiple') ? document.getElementById('buy-multiple').checked : false;
+            // Assuming generateConfigText is accessible
+            const configText = generateConfigText(isBulk);
+            openShareModal(configText);
+        });
+    }
+
+    if (shareWp) {
+        shareWp.addEventListener('click', () => {
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(currentShareText)}`;
+            window.open(waUrl, '_blank');
+            triggerHaptic();
+            shareModal.classList.remove('active');
+        });
+    }
+
+    if (shareEmail) {
+        shareEmail.addEventListener('click', () => {
+            const mailUrl = `mailto:?subject=${encodeURIComponent("Presupuesto de PC a Medida")}&body=${encodeURIComponent(currentShareText)}`;
+            window.open(mailUrl, '_blank');
+            triggerHaptic();
+            shareModal.classList.remove('active');
+        });
+    }
+
+    if (shareCopy) {
+        shareCopy.addEventListener('click', () => {
+            navigator.clipboard.writeText(currentShareText).then(() => {
+                const toastEl = document.getElementById('toast');
+                if (toastEl) {
+                    toastEl.classList.add('show');
+                    setTimeout(() => toastEl.classList.remove('show'), 3000);
                 }
+                shareModal.classList.remove('active');
             });
-        } else {
-            // Hide button if Web Share API is not supported
-            shareBtn.style.display = 'none';
-        }
+            triggerHaptic();
+        });
     }
 });
 

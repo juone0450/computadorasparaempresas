@@ -328,11 +328,18 @@ function renderPreconfiguredPcs(platform) {
                     <span class="pc-price-label">Precio Estimado</span>
                     <span class="pc-price-val">$ ${total.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0})}</span>
                 </div>
-                <button class="btn-primary" style="width:100%; text-align:center; justify-content:center;" onclick="customizePc(${idx}, '${platform}')">
-                    <i class="ph-bold ph-gear-six"></i> Personalizar en Armador
-                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-primary" style="flex: 1; text-align:center; justify-content:center; padding: 12px 10px; font-size: 13px;" onclick="customizePc(${idx}, '${platform}')">
+                        <i class="ph-bold ph-gear-six"></i> Armador
+                    </button>
+                    <button class="btn-whatsapp" style="flex: 1; text-align:center; justify-content:center; padding: 12px 10px; font-size: 13px; background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: var(--text-primary);" onclick="sharePcCard(${idx}, '${platform}')">
+                        <i class="ph-bold ph-share-network"></i> Compartir
+                    </button>
+                </div>
             </div>
         `;
+        // Fix the typo </div>> inside the string template if it was there (handled below)
+        
         container.appendChild(card);
     });
 }
@@ -372,6 +379,52 @@ function customizePc(idx, platform) {
     window.location.href = `index.html?${params.toString()}`;
 }
 
+// --- Share Modal Logic ---
+let currentShareText = "";
+function sharePcCard(idx, platform) {
+    const pc = predefinedPcs[platform][idx];
+    const matchedCpu = findBestMatch(componentsData.cpu, pc.specs.cpu);
+    const matchedMb = findBestMatch(componentsData.motherboard, pc.specs.motherboard);
+    const matchedRam = findBestMatch(componentsData.ram, pc.specs.ram);
+    
+    let matchedStorage;
+    if (pc.specs.storageType === 'nvme') {
+        matchedStorage = findBestMatch(componentsData.storage.nvme, pc.specs.storage);
+    } else {
+        matchedStorage = findBestMatch(componentsData.storage.sata, pc.specs.storage);
+    }
+    const matchedCase = findBestMatch(componentsData.case, pc.specs.case);
+
+    let total = pc.specs.fixedPrice || 0;
+    if (!pc.specs.fixedPrice) {
+        if (matchedCpu) total += matchedCpu.price;
+        if (matchedMb) total += matchedMb.price;
+        if (matchedRam) total += matchedRam.price * pc.specs.ramQty;
+        if (matchedStorage) total += matchedStorage.price;
+        if (matchedCase) total += matchedCase.price;
+    }
+
+    let text = `--- PRESUPUESTO: ${pc.title} ---\n\n`;
+    text += `${pc.desc}\n\n`;
+    if (matchedCpu) text += `Procesador: ${matchedCpu.name}\n`;
+    if (matchedMb) text += `Motherboard: ${matchedMb.name}\n`;
+    if (matchedRam) text += `Memoria RAM: ${matchedRam.name} (x${pc.specs.ramQty})\n`;
+    if (matchedStorage) text += `Almacenamiento: ${matchedStorage.name}\n`;
+    if (matchedCase) text += `Gabinete: ${matchedCase.name}\n`;
+    if (pc.specs.cooling && pc.specs.cooling !== 'Stock') {
+        text += `Cooler: ${pc.specs.cooling}\n`;
+    }
+    
+    text += `\nTOTAL APROX: $ ${total.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0})}\n`;
+
+    currentShareText = text;
+
+    const shareModal = document.getElementById('share-modal');
+    if (shareModal) {
+        shareModal.classList.add('active');
+    }
+}
+
 async function init() {
     await loadExcelData();
     // Read platform from data-platform attribute in HTML
@@ -406,6 +459,48 @@ async function init() {
             localStorage.setItem('theme', 'dark');
             btnDark.classList.add('active');
             btnLight.classList.remove('active');
+        });
+    }
+
+    // Modal listeners
+    const shareModal = document.getElementById('share-modal');
+    const shareModalClose = document.getElementById('share-modal-close');
+    const shareWp = document.getElementById('share-whatsapp-btn');
+    const shareEmail = document.getElementById('share-email-btn');
+    const shareCopy = document.getElementById('share-copy-btn');
+    const toast = document.getElementById('toast');
+
+    if (shareModalClose) {
+        shareModalClose.addEventListener('click', () => {
+            shareModal.classList.remove('active');
+        });
+    }
+
+    if (shareWp) {
+        shareWp.addEventListener('click', () => {
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(currentShareText)}`;
+            window.open(waUrl, '_blank');
+            if (shareModal) shareModal.classList.remove('active');
+        });
+    }
+
+    if (shareEmail) {
+        shareEmail.addEventListener('click', () => {
+            const mailUrl = `mailto:?subject=${encodeURIComponent("Presupuesto de PC Recomendada")}&body=${encodeURIComponent(currentShareText)}`;
+            window.open(mailUrl, '_blank');
+            if (shareModal) shareModal.classList.remove('active');
+        });
+    }
+
+    if (shareCopy) {
+        shareCopy.addEventListener('click', () => {
+            navigator.clipboard.writeText(currentShareText).then(() => {
+                if (toast) {
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 3000);
+                }
+                if (shareModal) shareModal.classList.remove('active');
+            });
         });
     }
 }

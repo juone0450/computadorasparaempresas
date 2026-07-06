@@ -392,6 +392,28 @@
     <!-- Toast Notification -->
     <div id="toast" class="toast">Configuración copiada al portapapeles</div>
 
+    <!-- SHARE MODAL -->
+    <div class="share-modal-overlay" id="share-modal">
+        <div class="share-modal-content">
+            <button class="share-modal-close" id="share-modal-close">
+                <i class="ph-bold ph-x"></i>
+            </button>
+            <h3 class="share-modal-title">Compartir Presupuesto</h3>
+            <p class="share-modal-subtitle">¿Cómo te gustaría enviar esta configuración?</p>
+            <div class="share-modal-options">
+                <button class="share-btn-option share-btn-whatsapp" id="share-whatsapp-btn">
+                    <i class="ph-bold ph-whatsapp-logo"></i> WhatsApp
+                </button>
+                <button class="share-btn-option share-btn-email" id="share-email-btn">
+                    <i class="ph-bold ph-envelope"></i> Correo Electrónico
+                </button>
+                <button class="share-btn-option" id="share-copy-btn">
+                    <i class="ph-bold ph-copy"></i> Copiar al portapapeles
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="xlsx.full.min.js"></script>
     <script src="app.js"></script>
 </body>
