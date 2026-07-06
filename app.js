@@ -653,9 +653,10 @@ function copyConfig() {
 }
 
 function handleWhatsAppClick() {
-    const configText = generateConfigText(true);
+    const isBulk = document.getElementById('buy-multiple') ? document.getElementById('buy-multiple').checked : false;
+    const configText = generateConfigText(isBulk);
     const encodedText = encodeURIComponent(configText);
-    const waUrl = `https://wa.me/5491131184780?text=${encodedText}`;
+    const waUrl = `https://wa.me/5491178275551?text=${encodedText}`;
     window.open(waUrl, '_blank');
 }
 

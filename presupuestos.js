@@ -328,14 +328,17 @@ function renderPreconfiguredPcs(platform) {
                     <span class="pc-price-label">Precio Estimado</span>
                     <span class="pc-price-val">$ ${total.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0})}</span>
                 </div>
-                <div style="display: flex; gap: 8px;">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
                     <button class="btn-primary" style="flex: 1; text-align:center; justify-content:center; padding: 12px 10px; font-size: 13px;" onclick="customizePc(${idx}, '${platform}')">
                         <i class="ph-bold ph-gear-six"></i> Armador
                     </button>
-                    <button class="btn-whatsapp" style="flex: 1; text-align:center; justify-content:center; padding: 12px 10px; font-size: 13px; background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: var(--text-primary);" onclick="sharePcCard(${idx}, '${platform}')">
+                    <button class="btn-primary" style="flex: 1; text-align:center; justify-content:center; padding: 12px 10px; font-size: 13px; background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: var(--text-primary);" onclick="sharePcCard(${idx}, '${platform}')">
                         <i class="ph-bold ph-share-network"></i> Compartir
                     </button>
                 </div>
+                <button class="btn-whatsapp" style="width: 100%; text-align:center; justify-content:center; padding: 12px 10px; font-size: 14px;" onclick="buyPcCard(${idx}, '${platform}')">
+                    <i class="ph-bold ph-whatsapp-logo"></i> Comprar por WhatsApp
+                </button>
             </div>
         `;
         // Fix the typo </div>> inside the string template if it was there (handled below)
@@ -423,6 +426,47 @@ function sharePcCard(idx, platform) {
     if (shareModal) {
         shareModal.classList.add('active');
     }
+}
+
+function buyPcCard(idx, platform) {
+    const pc = predefinedPcs[platform][idx];
+    const matchedCpu = findBestMatch(componentsData.cpu, pc.specs.cpu);
+    const matchedMb = findBestMatch(componentsData.motherboard, pc.specs.motherboard);
+    const matchedRam = findBestMatch(componentsData.ram, pc.specs.ram);
+    
+    let matchedStorage;
+    if (pc.specs.storageType === 'nvme') {
+        matchedStorage = findBestMatch(componentsData.storage.nvme, pc.specs.storage);
+    } else {
+        matchedStorage = findBestMatch(componentsData.storage.sata, pc.specs.storage);
+    }
+    const matchedCase = findBestMatch(componentsData.case, pc.specs.case);
+
+    let total = pc.specs.fixedPrice || 0;
+    if (!pc.specs.fixedPrice) {
+        if (matchedCpu) total += matchedCpu.price;
+        if (matchedMb) total += matchedMb.price;
+        if (matchedRam) total += matchedRam.price * pc.specs.ramQty;
+        if (matchedStorage) total += matchedStorage.price;
+        if (matchedCase) total += matchedCase.price;
+    }
+
+    let text = `¡Hola! Quiero confirmar la compra de esta PC:\n\n`;
+    text += `*${pc.title}*\n`;
+    if (matchedCpu) text += `Procesador: ${matchedCpu.name}\n`;
+    if (matchedMb) text += `Motherboard: ${matchedMb.name}\n`;
+    if (matchedRam) text += `Memoria RAM: ${matchedRam.name} (x${pc.specs.ramQty})\n`;
+    if (matchedStorage) text += `Almacenamiento: ${matchedStorage.name}\n`;
+    if (matchedCase) text += `Gabinete: ${matchedCase.name}\n`;
+    if (pc.specs.cooling && pc.specs.cooling !== 'Stock') {
+        text += `Cooler: ${pc.specs.cooling}\n`;
+    }
+    
+    text += `\n*TOTAL APROX: $ ${total.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0})}*`;
+
+    const encodedText = encodeURIComponent(text);
+    const waUrl = `https://wa.me/5491178275551?text=${encodedText}`;
+    window.open(waUrl, '_blank');
 }
 
 async function init() {
