@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configurador de PC a Medida</title>
     
-    <!-- PWA & Mobile Experience Meta Tags -->
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#111827">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
     <!-- SEO & Open Graph (WhatsApp, Facebook, etc.) -->
     <meta name="description" content="Diseña, cotiza y arma la PC de tus sueños a tu medida. Explora nuestro configurador interactivo, elige los mejores componentes y obtén el rendimiento que necesitas para gaming o trabajo.">
     <meta property="og:title" content="Configurador de PC a Medida - Arma tu Setup">
@@ -19,7 +13,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://juanmartinbarrientos.github.io/LandingPage/"> <!-- Ajustar URL final si es distinta -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1.1">
+    <link rel="stylesheet" href="style.css">
     <!-- Phosphor Icons for modern iconography -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -103,19 +97,14 @@
                 <img src="LOGO_2.png" alt="Logo" class="logo-img">
                 <h1>Configurador de PC</h1>
             </div>
-            <div class="header-actions" style="display: flex; gap: 12px; align-items: center;">
-                <button id="share-btn" class="icon-btn" title="Compartir">
-                    <i class="ph-bold ph-share-network"></i>
+            <div class="theme-toggle">
+                <span>Elegir motivo</span>
+                <button id="btn-light-theme" class="theme-btn" title="Modo Claro">
+                    <i class="ph-fill ph-sun"></i>
                 </button>
-                <div class="theme-toggle">
-                    <span>Elegir motivo</span>
-                    <button id="btn-light-theme" class="theme-btn" title="Modo Claro">
-                        <i class="ph-fill ph-sun"></i>
-                    </button>
-                    <button id="btn-dark-theme" class="theme-btn active" title="Modo Oscuro">
-                        <i class="ph-fill ph-moon"></i>
-                    </button>
-                </div>
+                <button id="btn-dark-theme" class="theme-btn active" title="Modo Oscuro">
+                    <i class="ph-fill ph-moon"></i>
+                </button>
             </div>
         </header>
 
@@ -199,7 +188,7 @@
                             <li><i class="ph-bold ph-cpu"></i> <span><strong>Plataforma:</strong> AMD Socket AM4</span></li>
                             <li><i class="ph-bold ph-hard-drive"></i> <span><strong>Almacenamiento:</strong> SSD 240GB alta velocidad</span></li>
                             <li><i class="ph-bold ph-cpu"></i> <span><strong>Memoria RAM:</strong> DDR4 8GB</span></li>
-                            <li><i class="ph-bold ph-motherboard"></i> <span><strong>Motherboard:</strong> ASUS de alta durabilidad</span></li>
+                            <li><i class="ph-bold ph-circuit-board"></i> <span><strong>Motherboard:</strong> ASUS de alta durabilidad</span></li>
                             <li><i class="ph-bold ph-desktop"></i> <span><strong>Gabinete:</strong> Gabinete Kit (incluye teclado, mouse y parlantes)</span></li>
                         </ul>
                         
@@ -208,7 +197,7 @@
                                 <span class="price-label">PRECIO ESPECIAL</span>
                                 <span class="price-amount">$370.000 <span class="currency">ARS</span></span>
                             </div>
-                            <a href="https://wa.me/5491178275551?text=Hola!%20Me%20interesa%20la%20oferta%20de%20la%20PC%20Armada%20AM4%20por%20$370.000%20para%20mi%20empresa." target="_blank" class="btn-whatsapp offer-btn">
+                            <a href="https://wa.me/5491123456789?text=Hola!%20Me%20interesa%20la%20oferta%20de%20la%20PC%20Armada%20AM4%20por%20$370.000%20para%20mi%20empresa." target="_blank" class="btn-whatsapp offer-btn">
                                 <i class="ph-bold ph-whatsapp-logo"></i> Consultar por esta Oferta
                             </a>
                         </div>
@@ -361,18 +350,15 @@
                         <span>Comprar 3 unidades y obtener descuento</span>
                     </label>
                     <div id="whatsapp-info" class="whatsapp-info">
-                        <p style="margin-bottom: 0;">Desbloqueá un descuento especial llevando 3 unidades.</p>
+                        <p style="margin-bottom: 12px;">Desbloqueá un descuento especial llevando 3 unidades.</p>
+                        <button id="whatsapp-btn" class="btn-whatsapp">
+                            <i class="ph-bold ph-whatsapp-logo"></i> Consultar por WhatsApp
+                        </button>
                     </div>
                 </div>
 
                 <div class="summary-content" id="summary-content">
                     <p class="empty-summary">Aún no has seleccionado componentes.</p>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <button id="whatsapp-btn" class="btn-whatsapp" style="width: 100%; justify-content: center; padding: 14px; font-size: 16px;">
-                        <i class="ph-bold ph-whatsapp-logo"></i> Consultar / Confirmar Compra
-                    </button>
                 </div>
             </section>
         </main>
@@ -386,36 +372,37 @@
                 <span class="price-label">TOTAL IVA INCLUÍDO</span>
                 <span class="price-value" id="total-price">$ 0,00</span>
             </div>
-            <button id="copy-config-btn" class="btn-primary">
-                Copiar configuración
-            </button>
+            <div class="footer-buttons" style="display: flex; gap: 10px; width: 100%;">
+                <button id="share-config-btn" class="btn-secondary" style="flex: 1; padding: 16px; background-color: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease;">
+                    <i class="ph-bold ph-share-network"></i> Compartir
+                </button>
+                <button id="copy-config-btn" class="btn-primary" style="flex: 2;">
+                    Copiar configuración
+                </button>
+            </div>
         </div>
     </footer>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">Configuración copiada al portapapeles</div>
-
-    <!-- SHARE MODAL -->
-    <div class="share-modal-overlay" id="share-modal">
-        <div class="share-modal-content">
-            <button class="share-modal-close" id="share-modal-close">
-                <i class="ph-bold ph-x"></i>
-            </button>
-            <h3 class="share-modal-title">Compartir Presupuesto</h3>
-            <p class="share-modal-subtitle">¿Cómo te gustaría enviar esta configuración?</p>
-            <div class="share-modal-options">
-                <button class="share-btn-option share-btn-whatsapp" id="share-whatsapp-btn">
-                    <i class="ph-bold ph-whatsapp-logo"></i> WhatsApp
+    <!-- Modal Compartir -->
+    <div id="share-modal" class="share-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div class="share-modal-content card" style="width: 90%; max-width: 400px; margin: 0; position: relative;">
+            <div class="share-modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                <h3 style="font-size: 18px; font-weight: 700; margin: 0;">Compartir Configuración</h3>
+                <button id="close-share-modal" class="btn-remove" style="width: 32px; height: 32px;"><i class="ph-bold ph-x"></i></button>
+            </div>
+            <div class="share-modal-body" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+                <button id="share-whatsapp-btn" class="btn-whatsapp" style="width: 100%; justify-content: center; padding: 14px; font-size: 15px;">
+                    <i class="ph-bold ph-whatsapp-logo"></i> Compartir por WhatsApp
                 </button>
-                <button class="share-btn-option share-btn-email" id="share-email-btn">
-                    <i class="ph-bold ph-envelope"></i> Correo Electrónico
-                </button>
-                <button class="share-btn-option" id="share-copy-btn">
-                    <i class="ph-bold ph-copy"></i> Copiar al portapapeles
+                <button id="share-email-btn" class="btn-primary" style="width: 100%; justify-content: center; padding: 14px; background-color: var(--primary-color); color: white; display: flex; align-items: center; gap: 8px; font-size: 15px;">
+                    <i class="ph-bold ph-envelope-simple"></i> Compartir por Email
                 </button>
             </div>
         </div>
     </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Configuración copiada al portapapeles</div>
 
     <script src="xlsx.full.min.js"></script>
     <script src="app.js"></script>

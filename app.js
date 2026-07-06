@@ -135,127 +135,16 @@ const html = document.documentElement;
 const btnLight = document.getElementById('btn-light-theme');
 const btnDark = document.getElementById('btn-dark-theme');
 
+// Share Modal Elements
+const shareConfigBtn = document.getElementById('share-config-btn');
+const shareModal = document.getElementById('share-modal');
+const closeShareModalBtn = document.getElementById('close-share-modal');
+const shareWhatsappBtn = document.getElementById('share-whatsapp-btn');
+const shareEmailBtn = document.getElementById('share-email-btn');
+
 // State
 let selectedPlatform = null;
 let storageCounter = 0;
-let isRestoring = false;
-
-function saveConfiguratorState() {
-    if (isRestoring) return;
-    
-    const storageRows = [];
-    document.querySelectorAll('.storage-row').forEach(row => {
-        const typeSelect = row.querySelector('.storage-type-select');
-        const itemSelect = row.querySelector('.storage-item-select');
-        if (typeSelect && itemSelect) {
-            storageRows.push({
-                type: typeSelect.value,
-                item: itemSelect.value
-            });
-        }
-    });
-
-    const state = {
-        selectedPlatform: selectedPlatform,
-        cpu: cpuSelect ? cpuSelect.value : '',
-        motherboard: mbSelect ? mbSelect.value : '',
-        ram: ramSelect ? ramSelect.value : '',
-        ramQty: ramQty ? ramQty.value : '1',
-        storageRows: storageRows,
-        case: caseSelect ? caseSelect.value : '',
-        psu: psuSelect ? psuSelect.value : '',
-        gpu: gpuSelect ? gpuSelect.value : '',
-        cooling: coolingSelect ? coolingSelect.value : '',
-        buyMultiple: buyMultipleCheckbox ? buyMultipleCheckbox.checked : false
-    };
-
-    localStorage.setItem('configurator_saved_state', JSON.stringify(state));
-}
-
-function restoreConfiguratorState() {
-    const savedStateStr = localStorage.getItem('configurator_saved_state');
-    if (!savedStateStr) return;
-    
-    isRestoring = true;
-    try {
-        const state = JSON.parse(savedStateStr);
-        
-        if (state.selectedPlatform) {
-            const btn = Array.from(platformBtns).find(b => b.getAttribute('data-socket') === state.selectedPlatform);
-            if (btn) {
-                btn.click();
-            }
-        }
-        
-        if (state.cpu && cpuSelect) {
-            cpuSelect.value = state.cpu;
-            cpuSelect.dispatchEvent(new Event('change'));
-        }
-        
-        if (state.motherboard && mbSelect) {
-            mbSelect.value = state.motherboard;
-            mbSelect.dispatchEvent(new Event('change'));
-        }
-        
-        if (state.ram && ramSelect) {
-            ramSelect.value = state.ram;
-            ramSelect.dispatchEvent(new Event('change'));
-        }
-        if (state.ramQty && ramQty) {
-            ramQty.value = state.ramQty;
-            ramQty.dispatchEvent(new Event('change'));
-        }
-        
-        if (state.storageRows && state.storageRows.length > 0) {
-            storageList.innerHTML = '';
-            storageCounter = 0;
-            
-            state.storageRows.forEach(savedRow => {
-                addStorageRow();
-                const rows = storageList.querySelectorAll('.storage-row');
-                const lastRow = rows[rows.length - 1];
-                if (lastRow) {
-                    const typeSelect = lastRow.querySelector('.storage-type-select');
-                    const itemSelect = lastRow.querySelector('.storage-item-select');
-                    if (typeSelect && itemSelect) {
-                        typeSelect.value = savedRow.type;
-                        typeSelect.dispatchEvent(new Event('change'));
-                        itemSelect.value = savedRow.item;
-                        itemSelect.dispatchEvent(new Event('change'));
-                    }
-                }
-            });
-        }
-        
-        if (state.case && caseSelect) {
-            caseSelect.value = state.case;
-            caseSelect.dispatchEvent(new Event('change'));
-        }
-        if (state.psu && psuSelect) {
-            psuSelect.value = state.psu;
-            psuSelect.dispatchEvent(new Event('change'));
-        }
-        if (state.gpu && gpuSelect) {
-            gpuSelect.value = state.gpu;
-            gpuSelect.dispatchEvent(new Event('change'));
-        }
-        if (state.cooling && coolingSelect) {
-            coolingSelect.value = state.cooling;
-            coolingSelect.dispatchEvent(new Event('change'));
-        }
-        
-        if (state.buyMultiple && buyMultipleCheckbox) {
-            buyMultipleCheckbox.checked = state.buyMultiple;
-            buyMultipleCheckbox.dispatchEvent(new Event('change'));
-        }
-        
-    } catch (e) {
-        console.error("Error restoring configuration state:", e);
-    } finally {
-        isRestoring = false;
-        updatePrice();
-    }
-}
 
 function initCountdown() {
     const COUNTDOWN_KEY = 'promo_target_time';
@@ -328,20 +217,8 @@ async function init() {
     populateSelect(psuSelect, componentsData.psu);
     populateSelect(gpuSelect, componentsData.gpu);
     populateSelect(coolingSelect, componentsData.cooling);
-    
-    // Only restore state or set default storage row if no query parameters exist
-    const hasQueryParams = window.location.search.length > 0;
-    if (hasQueryParams) {
-        addStorageRow(); // Initial storage row
-        loadFromQueryParams();
-    } else {
-        const savedState = localStorage.getItem('configurator_saved_state');
-        if (savedState) {
-            restoreConfiguratorState();
-        } else {
-            addStorageRow(); // Initial default storage row
-        }
-    }
+    addStorageRow(); // Initial storage row
+    loadFromQueryParams();
     
     // Listeners
     platformBtns.forEach(btn => btn.addEventListener('click', handlePlatformClick));
@@ -360,6 +237,19 @@ async function init() {
         }
         updatePrice();
     });
+    
+    // Share Modal Listeners
+    if (shareConfigBtn) shareConfigBtn.addEventListener('click', openShareModal);
+    if (closeShareModalBtn) closeShareModalBtn.addEventListener('click', closeShareModal);
+    if (shareWhatsappBtn) shareWhatsappBtn.addEventListener('click', shareViaWhatsApp);
+    if (shareEmailBtn) shareEmailBtn.addEventListener('click', shareViaEmail);
+    if (shareModal) {
+        shareModal.addEventListener('click', (e) => {
+            if (e.target === shareModal) {
+                closeShareModal();
+            }
+        });
+    }
     
     // Price update listeners
     document.querySelector('.configurator-main').addEventListener('change', updatePrice);
@@ -579,13 +469,11 @@ function updatePrice() {
     
     if (isBulk) {
         priceLabel.innerHTML = 'TOTAL APROX (SIN DESC.) <i class="ph-bold ph-whatsapp" style="color: #25D366; font-size: 16px; vertical-align: middle;"></i>';
-        totalPriceEl.textContent = `$ ${finalTotal.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0})} (x3)`;
+        totalPriceEl.textContent = `$ ${finalTotal.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} (x3)`;
     } else {
         priceLabel.textContent = 'TOTAL IVA INCLUÍDO';
-        totalPriceEl.textContent = `$ ${finalTotal.toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+        totalPriceEl.textContent = `$ ${finalTotal.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
     }
-    
-    saveConfiguratorState();
 }
 
 function generateConfigText(isBulk) {
@@ -653,10 +541,9 @@ function copyConfig() {
 }
 
 function handleWhatsAppClick() {
-    const isBulk = document.getElementById('buy-multiple') ? document.getElementById('buy-multiple').checked : false;
-    const configText = generateConfigText(isBulk);
+    const configText = generateConfigText(true);
     const encodedText = encodeURIComponent(configText);
-    const waUrl = `https://wa.me/5491178275551?text=${encodedText}`;
+    const waUrl = `https://wa.me/5491131184780?text=${encodedText}`;
     window.open(waUrl, '_blank');
 }
 
@@ -665,6 +552,39 @@ function showToast() {
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3000);
+}
+
+// Share Modal Logic
+function openShareModal() {
+    if (shareModal) {
+        shareModal.style.display = 'flex';
+    }
+}
+
+function closeShareModal() {
+    if (shareModal) {
+        shareModal.style.display = 'none';
+    }
+}
+
+function shareViaWhatsApp() {
+    const isBulk = buyMultipleCheckbox && buyMultipleCheckbox.checked;
+    const configText = generateConfigText(isBulk);
+    const encodedText = encodeURIComponent(configText);
+    // General share URL for WhatsApp
+    const waUrl = `https://api.whatsapp.com/send?text=${encodedText}`;
+    window.open(waUrl, '_blank');
+    closeShareModal();
+}
+
+function shareViaEmail() {
+    const isBulk = buyMultipleCheckbox && buyMultipleCheckbox.checked;
+    const configText = generateConfigText(isBulk);
+    const encodedSubject = encodeURIComponent("Mi Configuración de PC - decsatech");
+    const encodedBody = encodeURIComponent(configText);
+    const emailUrl = `mailto:?subject=${encodedSubject}&body=${encodedBody}`;
+    window.location.href = emailUrl;
+    closeShareModal();
 }
 
 // Start
@@ -729,90 +649,5 @@ function loadFromQueryParams() {
     updatePrice();
 }
 
-// --- Mobile Experience Enhancements ---
-
-// Haptic Feedback Utility
-function triggerHaptic() {
-    if (navigator.vibrate) {
-        navigator.vibrate(10); // 10ms subtle vibration
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Add haptic feedback to selects and buttons
-    const interactiveElements = document.querySelectorAll('select, button, .platform-btn, input[type="checkbox"]');
-    interactiveElements.forEach(el => {
-        el.addEventListener('change', triggerHaptic);
-        el.addEventListener('click', (e) => {
-            if (el.tagName === 'BUTTON' || el.classList.contains('platform-btn')) {
-                triggerHaptic();
-            }
-        });
-    });
-
-    // Custom Share Modal Logic
-    const shareModal = document.getElementById('share-modal');
-    const shareModalClose = document.getElementById('share-modal-close');
-    const shareBtn = document.getElementById('share-btn');
-    const shareWp = document.getElementById('share-whatsapp-btn');
-    const shareEmail = document.getElementById('share-email-btn');
-    const shareCopy = document.getElementById('share-copy-btn');
-    
-    let currentShareText = "";
-
-    function openShareModal(text) {
-        currentShareText = text;
-        if (shareModal) shareModal.classList.add('active');
-        triggerHaptic();
-    }
-
-    if (shareModalClose) {
-        shareModalClose.addEventListener('click', () => {
-            shareModal.classList.remove('active');
-        });
-    }
-
-    if (shareBtn) {
-        shareBtn.style.display = 'flex';
-        shareBtn.addEventListener('click', () => {
-            const isBulk = document.getElementById('buy-multiple') ? document.getElementById('buy-multiple').checked : false;
-            // Assuming generateConfigText is accessible
-            const configText = generateConfigText(isBulk);
-            openShareModal(configText);
-        });
-    }
-
-    if (shareWp) {
-        shareWp.addEventListener('click', () => {
-            const waUrl = `https://wa.me/?text=${encodeURIComponent(currentShareText)}`;
-            window.open(waUrl, '_blank');
-            triggerHaptic();
-            shareModal.classList.remove('active');
-        });
-    }
-
-    if (shareEmail) {
-        shareEmail.addEventListener('click', () => {
-            const mailUrl = `mailto:?subject=${encodeURIComponent("Presupuesto de PC a Medida")}&body=${encodeURIComponent(currentShareText)}`;
-            window.open(mailUrl, '_blank');
-            triggerHaptic();
-            shareModal.classList.remove('active');
-        });
-    }
-
-    if (shareCopy) {
-        shareCopy.addEventListener('click', () => {
-            navigator.clipboard.writeText(currentShareText).then(() => {
-                const toastEl = document.getElementById('toast');
-                if (toastEl) {
-                    toastEl.classList.add('show');
-                    setTimeout(() => toastEl.classList.remove('show'), 3000);
-                }
-                shareModal.classList.remove('active');
-            });
-            triggerHaptic();
-        });
-    }
-});
 
 document.addEventListener('DOMContentLoaded', init);

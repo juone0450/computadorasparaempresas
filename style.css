@@ -2,10 +2,10 @@
     /* LIGHT THEME VARIABLES */
     --bg-color: #f3f4f6;
     --bg-overlay: rgba(243, 244, 246, 0.85);
-    --card-bg: rgba(255, 255, 255, 0.65); /* More transparent */
+    --card-bg: rgba(255, 255, 255, 0.90);
     --text-primary: #111827;
     --text-secondary: #6b7280;
-    --border-color: rgba(229, 231, 235, 0.5); /* Semi-transparent border */
+    --border-color: #e5e7eb;
     --primary-color: #3b82f6;
     --primary-hover: #2563eb;
     --accent-color: #f59e0b;
@@ -28,10 +28,10 @@
     /* DARK THEME VARIABLES */
     --bg-color: #111827;
     --bg-overlay: rgba(17, 24, 39, 0.85);
-    --card-bg: rgba(22, 28, 45, 0.65); /* More transparent dark base */
+    --card-bg: rgba(31, 41, 55, 0.90);
     --text-primary: #f9fafb;
     --text-secondary: #9ca3af;
-    --border-color: rgba(55, 65, 81, 0.4); /* Semi-transparent border */
+    --border-color: #374151;
     --primary-color: #60a5fa;
     --primary-hover: #3b82f6;
     
@@ -71,8 +71,8 @@ body {
 /* CARDS & CONTAINERS */
 .card {
     background-color: var(--card-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     padding: 24px;
@@ -1065,245 +1065,10 @@ body {
     white-space: nowrap;
 }
 
-/* Mobile Responsive Adjustments */
-@media (max-width: 768px) {
-    .app-container {
-        padding: 12px 8px;
-    }
-    
-    .header {
-        flex-direction: column;
-        gap: 16px;
-    }
-    
+/* Responsive adjustment for offer container */
+@media (max-width: 767px) {
     .offer-container {
         flex-direction: column;
         align-items: stretch;
     }
-    
-    .offer-price-section {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .main-layout {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        position: static;
-        margin-bottom: 16px;
-    }
-
-    .sidebar-nav {
-        flex-direction: row;
-        overflow-x: auto;
-    }
-
-    .nav-item {
-        white-space: nowrap;
-    }
-}
-
-/* Header Share Button */
-.icon-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-primary);
-    font-size: 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    border-radius: 50%;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.icon-btn:hover {
-    background-color: var(--border-color);
-    transform: scale(1.1);
-}
-
-/* Sticky Footer for Mobile Experience */
-.sticky-footer {
-    display: none; /* Hidden by default on desktop */
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: var(--card-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid var(--border-color);
-    padding: 12px 16px;
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
-
-@media (max-width: 768px) {
-    .sticky-footer {
-        display: block; /* Show only on mobile */
-    }
-    
-    /* Extra padding at bottom to avoid overlapping with content */
-    body {
-        padding-bottom: 90px; 
-    }
-}
-
-.footer-content {
-    max-width: 800px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-}
-
-.sticky-footer .price-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.sticky-footer .price-label {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-}
-
-.sticky-footer .price-value {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--text-primary);
-}
-
-.sticky-footer .btn-primary {
-    padding: 12px 20px;
-    font-size: 14px;
-    flex-shrink: 0;
-    width: auto;
-}
-
-/* Share Modal Styles */
-.share-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    z-index: 2000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.share-modal-overlay.active {
-    display: flex;
-    opacity: 1;
-}
-
-.share-modal-content {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    padding: 24px;
-    width: 90%;
-    max-width: 400px;
-    position: relative;
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-    text-align: center;
-}
-
-.share-modal-overlay.active .share-modal-content {
-    transform: translateY(0);
-}
-
-.share-modal-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 24px;
-    cursor: pointer;
-    transition: color 0.2s ease;
-}
-
-.share-modal-close:hover {
-    color: var(--text-primary);
-}
-
-.share-modal-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: var(--text-primary);
-}
-
-.share-modal-subtitle {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-bottom: 24px;
-}
-
-.share-modal-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.share-btn-option {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 12px 16px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-}
-
-.share-btn-option:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-}
-
-.share-btn-whatsapp {
-    background-color: rgba(37, 211, 102, 0.1);
-    border-color: rgba(37, 211, 102, 0.3);
-    color: #25d366;
-}
-
-.share-btn-whatsapp:hover {
-    background-color: rgba(37, 211, 102, 0.2);
-    border-color: #25d366;
-}
-
-.share-btn-email {
-    background-color: rgba(59, 130, 246, 0.1);
-    border-color: rgba(59, 130, 246, 0.3);
-    color: #3b82f6;
-}
-
-.share-btn-email:hover {
-    background-color: rgba(59, 130, 246, 0.2);
-    border-color: #3b82f6;
 }
